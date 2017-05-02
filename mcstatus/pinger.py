@@ -139,8 +139,13 @@ class PingResponse:
 
         if "description" not in raw:
             raise ValueError("Invalid status object (no 'description' value)")
-        self.description = raw["description"]
-        self.description_clean = re.sub(r'\u00A7.', '', raw["description"])
+        if "text" not in raw["description"]:
+            self.description = raw["description"]
+        else:
+            self.description = raw["description"]["text"]
+        
+        self.description_clean = re.sub(r'\u00A7.', '', self.description)
+
 
         if "favicon" in raw:
             self.favicon = raw["favicon"]
